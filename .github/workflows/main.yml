@@ -19,6 +19,28 @@ jobs:
         
     - name: Install dependencies
       run: npm install
+    
+    - name: Create web assets directory
+      run: |
+        mkdir -p www
+        cat > www/index.html << 'EOF'
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>Time's Up Planner</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+          </style>
+        </head>
+        <body>
+          <h1>Time's Up Planner</h1>
+          <p>Loading app...</p>
+          <script src="cordova.js"></script>
+        </body>
+        </html>
+        EOF
         
     - name: Setup Java
       uses: actions/setup-java@v4
@@ -28,16 +50,16 @@ jobs:
         
     - name: Add Android platform
       run: npx cap add android
-        
+         
     - name: Sync files
       run: npx cap sync android
-        
+         
     - name: Build APK
       run: |
         cd android
         chmod +x gradlew
         ./gradlew assembleDebug
-        
+         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
