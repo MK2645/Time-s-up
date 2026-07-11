@@ -8,6 +8,11 @@
     "webContentsDebuggingEnabled": true
   },
   "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0,
+      "showSpinner": false,
+      "backgroundColor": "#14161b"
+    },
     "Filesystem": {
       "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
     }
