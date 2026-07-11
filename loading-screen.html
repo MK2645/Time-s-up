@@ -4,43 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Time's Up</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background: #14161b;
-            font-family: 'Oswald', sans-serif;
-        }
-        .splash {
-            text-align: center;
-            animation: fadeOut 1s ease-in-out forwards;
-            animation-delay: 1s;
-        }
-        .splash h1 {
-            color: #4fb477;
-            font-size: 3rem;
-            margin: 0;
-            letter-spacing: 2px;
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-    </style>
 </head>
 <body>
-    <div class="splash">
-        <h1>⏱ TIME'S UP</h1>
-    </div>
     <script>
-        // Auto-redirect after 2 seconds
-        setTimeout(() => {
-            window.location.href = 'www';
-        }, 2000);
+        window.location.href = 'www';
     </script>
 </body>
 </html>
