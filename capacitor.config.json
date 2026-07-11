@@ -1,20 +1,13 @@
 {
-  "appId": "com.timesup.planner",
-  "appName": "Time's Up Planner",
+  "appId": "com.mwewa.timesup",
+  "appName": "Time's Up",
   "webDir": "www",
-  "bundledWebRuntime": false,
-  "android": {
-    "allowMixedContent": true,
-    "webContentsDebuggingEnabled": true
-  },
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0,
-      "showSpinner": false,
-      "backgroundColor": "#14161b"
-    },
-    "Filesystem": {
-      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+      "launchAutoHide": true,
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false
     }
   }
 }
