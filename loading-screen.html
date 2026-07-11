@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading Screen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        loading-screen {
+            display: contents;
+        }
+    </style>
+</head>
+<body>
+    <loading-screen percentage="0"></loading-screen>
+
+    <script>
+        class LoadingScreen extends HTMLElement {
+            constructor() {
+                super();
+                this.attachShadow({ mode: 'open' });
+            }
+
+            connectedCallback() {
+                this.render();
+                this.setupAnimation();
+            }
+
+            render() {
+                const percentage = this.getAttribute('percentage') || '0';
+                
+                this.shadowRoot.innerHTML = `
+                    <style>
+                        :host {
+                            --primary-green: #00ff00;
+                            --secondary-green: #00cc00;
+                            --dark-bg: #000000;
+                            --text-color: #00ff00;
+                        }
+
+                        .loading-container {
+                            width: 100vw;
+                            height: 100vh;
+                            background: linear-gradient(135deg, #000000 0%, #0a1a0a 50%, #000000 100%);
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            z-index: 9999;
+                            font-family: 'Courier New', monospace;
+                            overflow: hidden;
+                        }
+
+                        .loading-content {
+                            text-align: center;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 40px;
+                        }
+
+                        .loading-title {
+                            font-size: 3.5rem;
+                            font-weight: bold;
+                            color: var(--primary-green);
+                            text-shadow: 0 0 10px var(--primary-green),
+                                         0 0 20px rgba(0, 255, 0, 0.5);
+                            letter-spacing: 3px;
+                            animation: flicker 0.15s infinite;
+                        }
+
+                        .loading-subtitle {
+                            font-size: 1.2rem;
+                            color: var(--text-color);
+                            opacity: 0.8;
+                            letter-spacing: 2px;
+                        }
+
+                        .progress-container {
+                            width: 300px;
+                            height: 30px;
+                            background: rgba(0, 255, 0, 0.1);
+                            border: 2px solid var(--primary-green);
+                            border-radius: 5px;
+                            overflow: hidden;
+                            position: relative;
+                            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3),
+                                        inset 0 0 10px rgba(0, 255, 0, 0.1);
+                            margin: 0 auto;
+                        }
+
+                        .progress-bar {
+                            height: 100%;
+                            background: linear-gradient(90deg, 
+                                var(--secondary-green) 0%, 
+                                var(--primary-green) 50%, 
+                                var(--secondary-green) 100%);
+                            width: ${percentage}%;
+                            transition: width 0.3s ease;
+                            box-shadow: 0 0 10px var(--primary-green),
+                                        inset 0 0 5px rgba(255, 255, 255, 0.3);
+                            position: relative;
+                            overflow: hidden;
+                        }
+
+                        .progress-bar::after {
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            bottom: 0;
+                            right: 0;
+                            background: linear-gradient(90deg,
+                                transparent,
+                                rgba(255, 255, 255, 0.3),
+                                transparent);
+                            animation: shine 2s infinite;
+                        }
+
+                        .percentage-text {
+                            color: var(--primary-green);
+                            font-size: 1.2rem;
+                            font-weight: bold;
+                            margin-top: 15px;
+                            text-shadow: 0 0 5px var(--primary-green);
+                            letter-spacing: 1px;
+                        }
+
+                        .loading-dots {
+                            font-size: 1.5rem;
+                            color: var(--primary-green);
+                            margin-top: 20px;
+                            letter-spacing: 3px;
+                        }
+
+                        .dot {
+                            display: inline-block;
+                            animation: dot-fade 1.4s infinite;
+                        }
+
+                        .dot:nth-child(1) {
+                            animation-delay: 0s;
+                        }
+
+                        .dot:nth-child(2) {
+                            animation-delay: 0.2s;
+                        }
+
+                        .dot:nth-child(3) {
+                            animation-delay: 0.4s;
+                        }
+
+                        @keyframes flicker {
+                            0%, 100% {
+                                text-shadow: 0 0 10px var(--primary-green),
+                                             0 0 20px rgba(0, 255, 0, 0.5);
+                                opacity: 1;
+                            }
+                            50% {
+                                text-shadow: 0 0 5px var(--primary-green),
+                                             0 0 10px rgba(0, 255, 0, 0.3);
+                                opacity: 0.9;
+                            }
+                        }
+
+                        @keyframes shine {
+                            0% {
+                                left: -100%;
+                            }
+                            100% {
+                                left: 100%;
+                            }
+                        }
+
+                        @keyframes dot-fade {
+                            0%, 60%, 100% {
+                                opacity: 0.3;
+                            }
+                            30% {
+                                opacity: 1;
+                            }
+                        }
+
+                        /* Grid background effect */
+                        .grid-background {
+                            position: absolute;
+                            width: 100%;
+                            height: 100%;
+                            top: 0;
+                            left: 0;
+                            background-image: 
+                                linear-gradient(0deg, transparent 24%, rgba(0, 255, 0, 0.05) 25%, rgba(0, 255, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.05) 75%, rgba(0, 255, 0, 0.05) 76%, transparent 77%, transparent),
+                                linear-gradient(90deg, transparent 24%, rgba(0, 255, 0, 0.05) 25%, rgba(0, 255, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(0, 255, 0, 0.05) 75%, rgba(0, 255, 0, 0.05) 76%, transparent 77%, transparent);
+                            background-size: 50px 50px;
+                            animation: grid-move 20s linear infinite;
+                            z-index: 0;
+                        }
+
+                        @keyframes grid-move {
+                            0% {
+                                transform: translate(0, 0);
+                            }
+                            100% {
+                                transform: translate(50px, 50px);
+                            }
+                        }
+
+                        .content-wrapper {
+                            position: relative;
+                            z-index: 1;
+                        }
+                    </style>
+
+                    <div class="loading-container">
+                        <div class="grid-background"></div>
+                        <div class="content-wrapper">
+                            <div class="loading-content">
+                                <div class="loading-title">⏱ TIME'S UP</div>
+                                <div class="loading-subtitle">Initializing System...</div>
+                                
+                                <div class="progress-container">
+                                    <div class="progress-bar"></div>
+                                </div>
+                                
+                                <div class="percentage-text">${percentage}%</div>
+                                
+                                <div class="loading-dots">
+                                    <span class="dot">.</span>
+                                    <span class="dot">.</span>
+                                    <span class="dot">.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            setupAnimation() {
+                // Auto-increment demo (remove in production or add control)
+                let percentage = parseInt(this.getAttribute('percentage')) || 0;
+                const interval = setInterval(() => {
+                    if (percentage < 100) {
+                        percentage += Math.random() * 15;
+                        if (percentage > 100) percentage = 100;
+                        this.setAttribute('percentage', Math.floor(percentage));
+                        this.render();
+                    } else {
+                        clearInterval(interval);
+                    }
+                }, 500);
+            }
+
+            // Method to update percentage from outside
+            setPercentage(value) {
+                if (value >= 0 && value <= 100) {
+                    this.setAttribute('percentage', Math.floor(value));
+                    this.render();
+                }
+            }
+        }
+
+        customElements.define('loading-screen', LoadingScreen);
+
+        // Demo: Update percentage every second
+        const loader = document.querySelector('loading-screen');
+        let demo = 0;
+        setInterval(() => {
+            if (demo <= 100) {
+                loader.setPercentage(demo);
+                demo += 10;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
