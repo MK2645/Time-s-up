@@ -19,7 +19,7 @@ jobs:
         
     - name: Install dependencies
       run: npm install
-            
+    
     - name: Create web assets directory
       run: |
         mkdir -p www
@@ -41,6 +41,7 @@ jobs:
         </body>
         </html>
         EOF
+        
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
@@ -49,16 +50,16 @@ jobs:
         
     - name: Add Android platform
       run: npx cap add android
-        
+         
     - name: Sync files
       run: npx cap sync android
-        
+         
     - name: Build APK
       run: |
         cd android
         chmod +x gradlew
         ./gradlew assembleDebug
-        
+         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
