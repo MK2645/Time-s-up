@@ -22,6 +22,7 @@ jobs:
     
     - name: Create web assets directory
       run: |
+      rm -rf www
         mkdir -p www
         cat > www/index.html << 'EOF'
         <!DOCTYPE html>
